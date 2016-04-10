@@ -1,0 +1,24 @@
+{
+  "name": "electrun",
+  "version": "0.0.0",
+  "description": "run on electron",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "automation",
+    "browser",
+    "electron",
+    "test"
+  ],
+  "author": "JongChan Choi",
+  "license": "Zlib",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/disjukr/electrun.git"
+  },
+  "dependencies": {
+    "electron-prebuilt": "^0.37.5"
+  }
+}
