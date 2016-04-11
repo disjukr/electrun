@@ -79,7 +79,13 @@ handlers['open'] = req => Promise.resolve().then(() => {
                 type: 'event',
                 eventType: eventType,
                 windowId: windowId,
-                args: Array.from(arguments)
+                args: Array.from(arguments).map(v => { // #1
+                    if (typeof v === 'function' || v && v.preventDefault) {
+                        return {};
+                    } else {
+                        return v;
+                    }
+                })
             });
         });
     }
@@ -182,19 +188,33 @@ handlers['reload'] = req => Promise.resolve().then(() => {
     return window.webContents;
 }).then(webContents => onload(webContents));
 
-handlers['toggle-dev-tool'] = req => Promise.resolve().then(() => {
-    const window = windows[req.windowId];
-    window.webContents.toggleDevTools();
+handlers['toggle-dev-tool'] = req => {
+    const { webContents } = windows[req.windowId];
+    if (webContents.isDevToolsOpened()) {
+        return handlers['close-dev-tool'](req);
+    } else {
+        return handlers['open-dev-tool'](req);
+    }
+};
+
+handlers['open-dev-tool'] = req => new Promise((resolve, reject) => {
+    const { webContents } = windows[req.windowId];
+    if (!webContents.isDevToolsOpened()) {
+        webContents.once('devtools-opened', () => resolve());
+        webContents.openDevTools(req.options);
+    } else {
+        resolve();
+    }
 });
 
-handlers['open-dev-tool'] = req => Promise.resolve().then(() => {
-    const window = windows[req.windowId];
-    window.webContents.openDevTools(req.options);
-});
-
-handlers['close-dev-tool'] = req => Promise.resolve().then(() => {
-    const window = windows[req.windowId];
-    window.webContents.closeDevTools();
+handlers['close-dev-tool'] = req => new Promise((resolve, reject) => {
+    const { webContents } = windows[req.windowId];
+    if (webContents.isDevToolsOpened()) {
+        webContents.once('devtools-closed', () => resolve());
+        webContents.closeDevTools();
+    } else {
+        resolve();
+    }
 });
 
 function onload(webContents) {
