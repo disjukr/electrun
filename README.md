@@ -57,6 +57,8 @@ main().catch(err => console.error(err && err.stack || err));
  - `goto(urlString) -> Promise`: goto url
  - `wait(msOrSelector) -> Promise`: wait till selected element is present
  - `eval(code) -> Promise<JsonValue>`: eval javascript code and return result
+ - `click(selector) -> Promise`
+ - `mousedown(selector) -> Promise`
  - `reload() -> Promise`: reload page
  - `f5() -> Promise`: same as `reload`
  - `devTool() -> Promise`: toggle developer tool
@@ -65,8 +67,6 @@ main().catch(err => console.error(err && err.stack || err));
  - `f12() -> Promise`: same as `devTool`
 
 #### todo
- - `click(selector) -> Promise`
- - `mousedown(selector) -> Promise`
  - `val(selector) -> Promise<JsonValue>`
  - `val(selector, value) -> Promise`
  - `screenshot([rect]) -> Promise<Buffer>`: returns screenshot as png buffer ([rect](https://github.com/electron/electron/blob/master/docs/api/browser-window.md#wincapturepagerect-callback))

@@ -100,6 +100,12 @@ class BrowserWindow extends EventEmitter {
     eval(code) {
         return this._request({ type: 'eval', code: code });
     }
+    click(selector) {
+        return this._request({ type: 'click', selector: selector });
+    }
+    mousedown(selector) {
+        return this._request({ type: 'mousedown', selector: selector });
+    }
     reload() {
         return this._request({ type: 'reload' });
     }
