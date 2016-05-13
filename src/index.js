@@ -85,6 +85,9 @@ class BrowserWindow extends EventEmitter {
     close() {
         return this._request({ type: 'close' });
     }
+    auth(username, password) {
+        return this._request({ type: 'auth', username: username, password: password });
+    }
     goto(urlString) {
         return this._request({ type: 'goto', url: urlString });
     }

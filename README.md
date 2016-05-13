@@ -53,6 +53,7 @@ main().catch(err => console.error(err && err.stack || err));
 
 ### BrowserWindow
  - `close() -> Promise`: close browser window
+ - `auth(username, password) -> Promise`: set user info for passing basic authentication
  - `goto(urlString) -> Promise`: goto url
  - `wait(msOrSelector) -> Promise`: wait till selected element is present
  - `eval(code) -> Promise<JsonValue>`: eval javascript code and return result

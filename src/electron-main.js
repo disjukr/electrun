@@ -39,6 +39,7 @@ process.on('message', req => {
 
 const handlers = {};
 const windows = {};
+const authMap = new WeakMap();
 
 handlers['open'] = req => Promise.resolve().then(() => {
     const window = new BrowserWindow(req.options);
@@ -96,6 +97,19 @@ handlers['open'] = req => Promise.resolve().then(() => {
 handlers['close'] = req => Promise.resolve().then(() => {
     const window = windows[req.windowId];
     window.destroy();
+});
+
+handlers['auth'] = req => Promise.resolve().then(() => {
+    const window = windows[req.windowId];
+    const { username, password } = req;
+    if (!authMap.has(window)) {
+        window.webContents.on('login', (event, request, authInfo, callback) => {
+            const { username, password } = authMap.get(window);
+            event.preventDefault();
+            callback(username, password);
+        });
+    }
+    authMap.set(window, { username, password });
 });
 
 handlers['goto'] = req => Promise.resolve().then(() => {
